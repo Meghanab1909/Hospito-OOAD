@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — RapidCare</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --surface2: #f9f7f5;
+  --border: #e8e2db;
+  --red: #d93025;
+  --red-dim: rgba(217,48,37,0.08);
+  --red-glow: rgba(217,48,37,0.18);
+  --text: #1a1714;
+  --muted: #9a8f85;
+  --accent: #2563eb;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 5% 80%, rgba(217,48,37,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 95% 10%, rgba(37,99,235,0.05) 0%, transparent 55%);
+}
+.container { width:100%; max-width:480px; animation:fadeUp 0.45s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.logo { display:flex; align-items:center; gap:10px; margin-bottom:32px; }
+.logo-icon { width:38px; height:38px; background:var(--red); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 2px 12px var(--red-glow); }
+.logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.5px; }
+.logo-text span { color:var(--red); }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:36px 32px; box-shadow:0 4px 24px rgba(0,0,0,0.07),0 1px 4px rgba(0,0,0,0.04); }
+h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:26px; margin-bottom:5px; letter-spacing:-0.5px; }
+.subtitle { color:var(--muted); font-size:14px; margin-bottom:28px; font-weight:300; }
+.section-label { font-size:11px; font-weight:600; color:var(--red); text-transform:uppercase; letter-spacing:1.2px; margin-bottom:14px; margin-top:22px; display:flex; align-items:center; gap:8px; }
+.section-label:first-child { margin-top:0; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.field { margin-bottom:14px; }
+label { display:block; font-size:11.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:7px; }
+input[type="text"], input[type="password"] { width:100%; background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.18s,box-shadow 0.18s,background 0.18s; }
+input:focus { border-color:var(--red); background:var(--surface); box-shadow:0 0 0 3px var(--red-dim); }
+input::placeholder { color:#c4bdb5; }
+.btn-primary { width:100%; background:var(--red); color:#fff; border:none; border-radius:10px; padding:13px; font-family:'Syne',sans-serif; font-weight:700; font-size:14.5px; cursor:pointer; margin-top:22px; transition:opacity 0.2s,box-shadow 0.2s,transform 0.1s; box-shadow:0 3px 14px var(--red-glow); }
+.btn-primary:hover { opacity:0.88; }
+.btn-primary:active { transform:scale(0.99); }
+.signin-link { text-align:center; margin-top:20px; padding-top:18px; border-top:1px solid var(--border); font-size:13px; color:var(--muted); }
+.signin-link a { color:var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <div class="logo-icon">🚑</div>
+    <div class="logo-text">Hospito</span></div>
+  </div>
+  <div class="card">
+    <h2>Create account</h2>
+    <p class="subtitle">Join RapidCare for fast emergency response</p>
+    <form action="/register" method="post" th:object="${patient}">
+      <div class="section-label">Personal Info</div>
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" th:field="*{name}" placeholder="John Doe">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="text" th:field="*{email}" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" th:field="*{password}" placeholder="Create a strong password">
+      </div>
+      <div class="section-label">Medical Profile</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Height</label>
+          <input type="text" th:field="*{height}" placeholder="e.g. 175 cm">
+        </div>
+        <div class="field">
+          <label>Weight</label>
+          <input type="text" th:field="*{weight}" placeholder="e.g. 70 kg">
+        </div>
+      </div>
+      <div class="field">
+        <label>Allergies</label>
+        <input type="text" th:field="*{allergies}" placeholder="None, or list known allergies">
+      </div>
+      <button type="submit" class="btn-primary">Create Account</button>
+    </form>
+    <div class="signin-link">Already have an account? <a href="/login">Sign in</a></div>
+  </div>
+</div>
+</body>
+</html>

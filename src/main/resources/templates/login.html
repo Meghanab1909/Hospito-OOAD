@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — RapidCare</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --surface2: #f9f7f5;
+  --border: #e8e2db;
+  --red: #d93025;
+  --red-dim: rgba(217,48,37,0.08);
+  --red-glow: rgba(217,48,37,0.18);
+  --text: #1a1714;
+  --muted: #9a8f85;
+  --accent: #2563eb;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 5% 80%, rgba(217,48,37,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 95% 10%, rgba(37,99,235,0.05) 0%, transparent 55%);
+}
+.container { width: 100%; max-width: 420px; padding: 20px; animation: fadeUp 0.45s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.logo { display: flex; align-items: center; gap: 10px; margin-bottom: 36px; }
+.logo-icon { width:38px; height:38px; background:var(--red); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 2px 12px var(--red-glow); }
+.logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.5px; }
+.logo-text span { color:var(--red); }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:36px 32px; box-shadow:0 4px 24px rgba(0,0,0,0.07),0 1px 4px rgba(0,0,0,0.04); }
+h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:26px; margin-bottom:5px; letter-spacing:-0.5px; }
+.subtitle { color:var(--muted); font-size:14px; margin-bottom:28px; font-weight:300; }
+.field { margin-bottom:18px; }
+label { display:block; font-size:11.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:7px; }
+input[type="text"], input[type="password"] { width:100%; background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14.5px; outline:none; transition:border-color 0.18s,box-shadow 0.18s,background 0.18s; }
+input:focus { border-color:var(--red); background:var(--surface); box-shadow:0 0 0 3px var(--red-dim); }
+input::placeholder { color:#c4bdb5; }
+.btn-primary { width:100%; background:var(--red); color:#fff; border:none; border-radius:10px; padding:13px; font-family:'Syne',sans-serif; font-weight:700; font-size:14.5px; cursor:pointer; margin-top:8px; transition:opacity 0.2s,box-shadow 0.2s,transform 0.1s; box-shadow:0 3px 14px var(--red-glow); }
+.btn-primary:hover { opacity:0.88; }
+.btn-primary:active { transform:scale(0.99); }
+.error-msg { background:rgba(217,48,37,0.07); border:1px solid rgba(217,48,37,0.2); border-radius:8px; padding:10px 14px; font-size:13px; color:#b91c1c; margin-bottom:18px; }
+.links { display:flex; justify-content:space-between; margin-top:22px; padding-top:20px; border-top:1px solid var(--border); }
+.links a { color:var(--muted); text-decoration:none; font-size:13px; transition:color 0.18s; }
+.links a:hover { color:var(--text); }
+.links a.highlight { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <div class="logo-icon">🚑</div>
+    <div class="logo-text">Hospito</span></div>
+  </div>
+  <div class="card">
+    <h2>Welcome back</h2>
+    <p class="subtitle">Sign in to your emergency care account</p>
+    <p th:if="${error}" th:text="${error}" class="error-msg"></p>
+    <form action="/login" method="post">
+      <div class="field">
+        <label>Email</label>
+        <input type="text" name="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn-primary">Sign In</button>
+    </form>
+    <div class="links">
+      <a href="/register">Create an account</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

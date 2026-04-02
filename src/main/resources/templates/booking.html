@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Ambulance — RapidCare</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --surface2: #f9f7f5;
+  --border: #e8e2db;
+  --red: #d93025;
+  --red-dim: rgba(217,48,37,0.08);
+  --red-glow: rgba(217,48,37,0.18);
+  --text: #1a1714;
+  --muted: #9a8f85;
+  --accent: #2563eb;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 20px;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 5% 80%, rgba(217,48,37,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 95% 10%, rgba(37,99,235,0.05) 0%, transparent 55%);
+}
+.container { width:100%; max-width:500px; animation:fadeUp 0.45s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.back-link { display:inline-flex; align-items:center; gap:6px; color:var(--muted); text-decoration:none; font-size:14px; margin-bottom:26px; transition:color 0.18s; }
+.back-link:hover { color:var(--text); }
+.page-title { font-family:'Syne',sans-serif; font-weight:800; font-size:30px; letter-spacing:-0.8px; margin-bottom:5px; }
+.page-title span { color:var(--red); }
+.subtitle { color:var(--muted); font-size:14px; margin-bottom:26px; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:32px 28px; box-shadow:0 4px 24px rgba(0,0,0,0.07),0 1px 4px rgba(0,0,0,0.04); }
+.section-label { font-size:11px; font-weight:600; color:var(--red); text-transform:uppercase; letter-spacing:1.2px; margin-bottom:14px; margin-top:22px; display:flex; align-items:center; gap:8px; }
+.section-label:first-child { margin-top:0; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.field { margin-bottom:14px; }
+label { display:block; font-size:11.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:7px; }
+input[type="text"], input[type="number"] { width:100%; background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.18s,box-shadow 0.18s,background 0.18s; }
+input:focus { border-color:var(--red); background:var(--surface); box-shadow:0 0 0 3px var(--red-dim); }
+input::placeholder { color:#c4bdb5; }
+
+/* Severity cards */
+.severity-opts { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.severity-card { cursor:pointer; }
+.severity-card input[type="radio"] { display:none; }
+.severity-card .face { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:14px 8px; border-radius:12px; border:1.5px solid var(--border); background:var(--surface2); font-size:13px; font-weight:500; color:var(--muted); transition:all 0.18s; text-align:center; }
+.severity-card .face .icon { font-size:22px; }
+.severity-card input:checked + .face { border-color:var(--red); background:var(--red-dim); color:var(--text); }
+.severity-card .face:hover { border-color:rgba(217,48,37,0.3); color:var(--text); background:var(--surface); }
+
+/* Type toggle */
+.type-opts { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.type-card { cursor:pointer; }
+.type-card input[type="radio"] { display:none; }
+.type-card .face { display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:10px; border:1.5px solid var(--border); background:var(--surface2); font-size:14px; color:var(--muted); transition:all 0.18s; }
+.type-card input:checked + .face { border-color:var(--accent); background:rgba(37,99,235,0.07); color:var(--text); }
+.type-card .face:hover { border-color:rgba(37,99,235,0.3); color:var(--text); background:var(--surface); }
+
+#otherDetails { background:rgba(37,99,235,0.04); border:1.5px solid rgba(37,99,235,0.15); border-radius:12px; padding:18px; margin-top:14px; }
+#otherDetails .field:last-child { margin-bottom:0; }
+
+.btn-primary { width:100%; background:var(--red); color:#fff; border:none; border-radius:10px; padding:14px; font-family:'Syne',sans-serif; font-weight:700; font-size:15px; cursor:pointer; margin-top:24px; transition:opacity 0.2s,box-shadow 0.2s,transform 0.1s; box-shadow:0 3px 14px var(--red-glow); display:flex; align-items:center; justify-content:center; gap:8px; }
+.btn-primary:hover { opacity:0.88; }
+.btn-primary:active { transform:scale(0.99); }
+</style>
+<script>
+  function toggleFields() {
+    var type = document.querySelector('input[name="type"]:checked').value;
+    var otherDiv = document.getElementById("otherDetails");
+    if (type === "other") {
+      otherDiv.style.display = "block";
+    } else {
+      otherDiv.style.display = "none";
+    }
+  }
+</script>
+</head>
+<body onload="toggleFields()">
+<div class="container">
+  <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+  <div class="page-title">Book <span>Ambulance</span></div>
+  <p class="subtitle">Emergency dispatch will be notified immediately</p>
+  <div class="card">
+    <form action="/book" method="post" th:object="${booking}">
+      <div class="section-label">Destination</div>
+      <div class="field">
+        <label>Hospital Name</label>
+        <input type="text" th:field="*{hospitalName}" placeholder="Enter hospital name">
+      </div>
+      <div class="section-label">Injury Severity</div>
+      <div class="severity-opts">
+        <label class="severity-card">
+          <input type="radio" th:field="*{injuryType}" value="normal">
+          <div class="face"><span class="icon">🟢</span>Normal</div>
+        </label>
+        <label class="severity-card">
+          <input type="radio" th:field="*{injuryType}" value="serious">
+          <div class="face"><span class="icon">🟡</span>Serious</div>
+        </label>
+        <label class="severity-card">
+          <input type="radio" th:field="*{injuryType}" value="critical">
+          <div class="face"><span class="icon">🔴</span>Critical</div>
+        </label>
+      </div>
+      <div class="section-label">Who is this for?</div>
+      <div class="type-opts">
+        <label class="type-card">
+          <input type="radio" name="type" value="self" checked onchange="toggleFields()">
+          <div class="face"><span>🧍</span> Book for Me</div>
+        </label>
+        <label class="type-card">
+          <input type="radio" name="type" value="other" onchange="toggleFields()">
+          <div class="face"><span>👥</span> Someone Else</div>
+        </label>
+      </div>
+      <div id="otherDetails" style="display:none;">
+        <div class="field">
+          <label>Patient Name</label>
+          <input type="text" name="otherName" placeholder="Full name">
+        </div>
+        <div class="field">
+          <label>Patient Age</label>
+          <input type="number" name="otherAge" placeholder="Age in years">
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">🚨 Dispatch Ambulance</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

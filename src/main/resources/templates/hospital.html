@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Queue — RapidCare</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --surface2: #f9f7f5;
+  --border: #e8e2db;
+  --red: #d93025;
+  --red-dim: rgba(217,48,37,0.08);
+  --text: #1a1714;
+  --muted: #9a8f85;
+  --accent: #2563eb;
+  --green: #16a34a;
+  --yellow: #d97706;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 5% 80%, rgba(217,48,37,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 95% 10%, rgba(37,99,235,0.04) 0%, transparent 55%);
+}
+.container { max-width: 1000px; margin: 0 auto; animation: fadeUp 0.45s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.back-link { display:inline-flex; align-items:center; gap:6px; color:var(--muted); text-decoration:none; font-size:14px; margin-bottom:26px; transition:color 0.18s; }
+.back-link:hover { color:var(--text); }
+.page-title { font-family:'Syne',sans-serif; font-weight:800; font-size:30px; letter-spacing:-0.8px; margin-bottom:5px; }
+.page-title span { color:var(--accent); }
+.subtitle { color:var(--muted); font-size:14px; margin-bottom:26px; }
+
+/* Search card */
+.search-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; margin-bottom:24px; display:flex; gap:12px; align-items:flex-end; box-shadow:0 2px 12px rgba(0,0,0,0.05); }
+.search-field { flex:1; }
+label { display:block; font-size:11.5px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:7px; }
+input[type="text"] { width:100%; background:var(--surface2); border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:border-color 0.18s,box-shadow 0.18s; }
+input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
+input::placeholder { color:#c4bdb5; }
+.btn-search { background:var(--accent); color:#fff; border:none; border-radius:10px; padding:11px 20px; font-family:'Syne',sans-serif; font-weight:600; font-size:14px; cursor:pointer; white-space:nowrap; transition:opacity 0.2s; box-shadow:0 3px 12px rgba(37,99,235,0.25); }
+.btn-search:hover { opacity:0.88; }
+.btn-discharge { background: var(--red); color:#fff; border:none; border-radius:8px; padding:7px 14px; font-family:'Syne',sans-serif; font-weight:600; font-size:12px; cursor:pointer; white-space:nowrap; transition:opacity 0.2s; box-shadow:0 2px 8px rgba(217,48,37,0.2); }
+.btn-discharge:hover { opacity:0.88; }
+
+/* Table */
+.queue-table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.05); }
+
+/* 5-column grid: Patient | Severity | Driver | Diagnosis | Actions */
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1.4fr 2fr 1.2fr;
+  align-items: center;
+}
+
+.table-header { 
+  padding: 12px 20px; 
+  background: var(--surface2); 
+  border-bottom: 1px solid var(--border); 
+  font-size: 11px; 
+  font-weight: 600; 
+  color: var(--muted); 
+  text-transform: uppercase; 
+  letter-spacing: 0.8px; 
+}
+.table-row { 
+  padding: 15px 20px; 
+  border-bottom: 1px solid var(--border); 
+  font-size: 14px; 
+  gap: 12px;
+  transition: background 0.15s; 
+}
+.table-row:last-child { border-bottom: none; }
+.table-row:hover { background: var(--surface2); }
+
+.severity-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; }
+.badge-normal   { background:rgba(22,163,74,0.1);  color:var(--green);  }
+.badge-serious  { background:rgba(217,119,6,0.1); color:var(--yellow); }
+.badge-critical { background:rgba(217,48,37,0.1);  color:var(--red);    }
+
+.driver-cell { color:var(--muted); font-size:13px; }
+
+.diagnosis-text { font-size:13px; color:var(--text); }
+.diagnosis-text.empty { color:var(--muted); font-style:italic; }
+
+/* Inline diagnosis form */
+.diagnosis-form { margin-top: 8px; display:flex; flex-direction:column; gap:6px; }
+.diagnosis-form input[type="text"] { padding: 7px 10px; font-size: 13px; }
+.btn-diagnose { background: var(--accent); color:#fff; border:none; border-radius:8px; padding:6px 12px; font-family:'Syne',sans-serif; font-weight:600; font-size:12px; cursor:pointer; transition:opacity 0.2s; align-self:flex-start; }
+.btn-diagnose:hover { opacity:0.88; }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+  <div class="page-title">Hospital <span>Queue</span></div>
+  <p class="subtitle">View live patient queue for any hospital</p>
+
+  <div class="search-card">
+    <form action="/hospital/queue" method="get" style="display:contents;">
+      <div class="search-field">
+        <label>Hospital Name</label>
+        <input type="text" name="name" placeholder="e.g. City General Hospital" required>
+      </div>
+      <button type="submit" class="btn-search">View Queue</button>
+    </form>
+  </div>
+
+  <div class="queue-table-wrap" th:if="${queue != null}">
+
+    <!-- ── Header: 5 columns ── -->
+    <div class="table-header">
+      <div>Patient</div>
+      <div>Severity</div>
+      <div>Assigned Driver</div>
+      <div>Diagnosis</div>
+      <div>Actions</div>
+    </div>
+
+    <!-- ── Rows ── -->
+    <div th:each="b : ${queue}" class="table-row">
+
+      <!-- 1. Patient -->
+      <div th:text="${b.patientName}">—</div>
+
+      <!-- 2. Severity -->
+      <div>
+        <span class="severity-badge badge-normal" th:text="${b.severity}">—</span>
+      </div>
+
+      <!-- 3. Assigned Driver -->
+      <div class="driver-cell"
+           th:text="${b.driver != null ? b.driver.name : 'Unassigned'}">—</div>
+
+      <!-- 4. Diagnosis -->
+      <div>
+        <div class="diagnosis-text"
+             th:classappend="${b.diagnosis == null ? 'empty' : ''}"
+             th:text="${b.diagnosis != null ? b.diagnosis : 'No diagnosis yet'}">—</div>
+
+        <form class="diagnosis-form"
+              action="/doctor/diagnosis" method="post"
+              th:if="${session.user != null and session.user.role == 'DOCTOR'}">
+          <input type="hidden" name="bookingId" th:value="${b.id}">
+          <input type="text" name="diagnosis" placeholder="Enter diagnosis" required>
+          <button type="submit" class="btn-diagnose">Add Diagnosis</button>
+        </form>
+      </div>
+
+      <!-- 5. Actions -->
+      <div th:if="${session.user != null and session.user.role == 'DOCTOR'}">
+        <form action="/doctor/discharge" method="post">
+          <input type="hidden" name="bookingId" th:value="${b.id}">
+          <button type="submit" class="btn-discharge">Discharge</button>
+        </form>
+      </div>
+      <!-- Empty cell placeholder when not a doctor, keeps grid intact -->
+      <div th:unless="${session.user != null and session.user.role == 'DOCTOR'}"></div>
+
+    </div>
+
+  </div><!-- /queue-table-wrap -->
+</div>
+</body>
+</html>
