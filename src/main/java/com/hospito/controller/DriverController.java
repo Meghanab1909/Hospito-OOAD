@@ -1,3 +1,24 @@
+/*
+ * Author: Mitha M K
+ * Class: Sem 6 Sec F
+ * Project: Hospito
+ * 
+ * Author: N Rakshitha
+ * Class: Sem 6 Sec F
+ * Project: Hospito
+*/
+
+/*
+Design Principles Used:
+1. Separation of Concerns (SoC)
+2. MVC Architecture (Model–View–Controller)
+3. Dependency Injection (DI)
+4. Single Responsibility Principle (SRP) (partially)
+5. Loose Coupling (partially)
+6. Convention over Configuration
+7. Encapsulation
+*/
+
 package com.hospito.controller;
 
 import com.hospito.model.Booking;
