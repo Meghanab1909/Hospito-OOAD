@@ -1,3 +1,24 @@
+/*
+ * Author: Mitha M K
+ * Class: Sem 6 Sec F
+ * Project: Hospito
+ * 
+ * Author: Mrunal Manjunath Kudtarkar
+ * Class: Sem 6 Sec F
+ * Project: Hospito
+*/
+
+/*
+Design Principles Used:
+1. Seperation of Concerns (SoC)
+2. MVC Architecture (Model-View-Controller)
+3. Dependency Injection (DI)
+4. Single Responsibility Principle (SRP)
+5. Loose Coupling
+6. Convention over Configuration (Spring)
+7. Encapsulation
+*/
+
 package com.hospito.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
