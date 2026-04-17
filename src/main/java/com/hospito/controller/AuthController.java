@@ -1,3 +1,19 @@
+/*
+ * Author: Meghana Saisri Bisa
+ * Class: Sem 6 Sec F
+ * Project: Hospito
+*/
+
+/*
+Design Principles Used:
+Separation of Concerns
+MVC Pattern
+Dependency Injection
+Single Responsibility (mostly)
+Loose Coupling (partially)
+Open/Closed (can improve)
+*/
+
 package com.hospito.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
