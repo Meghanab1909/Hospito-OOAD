@@ -3,7 +3,7 @@
  * Class: Sem 6 Sec F
  * Project: Hospito
  * 
- * Author: N Rakshitha
+ * Author: Mrunal Manjunath Kudtarkar
  * Class: Sem 6 Sec F
  * Project: Hospito
 */
