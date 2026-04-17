@@ -1,3 +1,23 @@
+/*
+ * Author: Mitha M K
+ * Class: Sem 6 Sec F
+ * Project: Hospito
+ * 
+ * Author: N Rakshitha
+ * Class: Sem 6 Sec F
+ * Project: Hospito
+*/
+
+/*
+Design Principles Used:
+1. Separation of Concerns (SoC)
+2. Encapsulation
+3. Object-Relational Mapping (ORM)
+4. Abstraction
+5. Single Responsibility Principle (SRP)
+6. Convention over Configuration
+*/
+
 package com.hospito.model;
 
 import jakarta.persistence.*;
