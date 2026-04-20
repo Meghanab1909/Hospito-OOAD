@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register — RapidCare</title>
+<title>Register — Hospito</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,7 +65,7 @@ input::placeholder { color:#c4bdb5; }
   </div>
   <div class="card">
     <h2>Create account</h2>
-    <p class="subtitle">Join RapidCare for fast emergency response</p>
+    <p class="subtitle">Join Hospito for fast emergency response</p>
     <form action="/register" method="post" th:object="${patient}">
       <div class="section-label">Personal Info</div>
       <div class="field">
@@ -83,11 +83,11 @@ input::placeholder { color:#c4bdb5; }
       <div class="section-label">Medical Profile</div>
       <div class="grid-2">
         <div class="field">
-          <label>Height</label>
+          <label>Height (in m)</label>
           <input type="text" th:field="*{height}" placeholder="e.g. 175 cm">
         </div>
         <div class="field">
-          <label>Weight</label>
+          <label>Weight (in Kg)</label>
           <input type="text" th:field="*{weight}" placeholder="e.g. 70 kg">
         </div>
       </div>
